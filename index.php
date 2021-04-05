@@ -1,17 +1,21 @@
 <?php
-//CONSTANTES
-define('FILE_PATH', 'matches.csv');
-define('TODAY', (new DateTime('now', new DateTimeZone('Europe/Brussels')))->format('M jS, Y'));
-
-//Variable
+//importations
+require("./configs/config.php");
+require("./utils/dbacess.php");
+require("./models/team.php");
+require("./models/match.php");
+//importatoin grâce au  namespaces
+use function Team\all as teamAll;
+use function Match\all as MatchAll;
+//Variables
+$pdo = getConnection();
+$teams = teamAll($pdo); //récupere les data via la fonction all
 $matches = [];
-$teams = [];
 $standings = [];
 $handle = fopen(FILE_PATH, 'r'); //r = read, fopen stock le contenu du fichier dans $handle
 $headers = fgetcsv($handle, 1000, ','); // on récupère les headers car cette fonction ne prend qu'une ligne
-
-//récupération 
-function getEmptySatsArray()
+//recuperation
+function getEmptySatsArray(): array
 {
     return [
         'games' => 0,
@@ -20,8 +24,8 @@ function getEmptySatsArray()
         'losses' => 0,
         'draws' => 0,
         'GF' => 0,
-        'GA' => 0,
         'GD' => 0,
+        'GA' => 0,
     ];
 }
 //récupération et création du tableau $matches et completion des variables
@@ -76,11 +80,7 @@ uasort($standings, function ($a, $b) {
     return $a['points'] > $b['points'] ? -1 : 1;
 });
 
-//Liste des teams existantes à partir du tableau standings
-$teams = array_keys($standings);
-sort($teams);
-
 /* --------------TEMPLATE-------------- */
 // require renvoit une erreur fatale, inculde ne fait pas d'erreur.
 //on ajoute _once pour alerter si il charge le fichier 2fois
-include('./vue.php');
+include('./views/vue.php');

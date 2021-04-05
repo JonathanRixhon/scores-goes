@@ -87,8 +87,8 @@
 
                 <!-- Génération de la liste -->
                 <?php foreach ($teams as $team) : ?>
-                    <option value="<?= $team ?>">
-                        <?= $team ?>
+                    <option value="<?= $team->id ?>">
+                        <?= $team->name ?> [<?= $team->slug ?>]
                     </option>
                 <?php endforeach; ?>
 
@@ -104,8 +104,8 @@
 
                 <!-- Génération de la liste -->
                 <?php foreach ($teams as $team) : ?>
-                    <option value="<?= $team ?>">
-                        <?= $team ?>
+                    <option value="<?= $team->id ?>">
+                        <?= $team->name ?> [<?= $team->slug ?>]
                     </option>
                 <?php endforeach; ?>
 
