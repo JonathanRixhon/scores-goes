@@ -5,15 +5,20 @@ require("./utils/dbacess.php");
 require("./models/team.php");
 require("./models/match.php");
 //importatoin grâce au  namespaces
-use function Team\all as teamAll;
-use function Match\all as MatchAll;
+use function Team\all as allTeams;
+use function Match\AllWithTeams as matchesAllWithTeams;
+use function Match\AllWithTeamsGrouped as matchesAllWithTeamsGrouped;
 //Variables
 $pdo = getConnection();
-$teams = teamAll($pdo); //récupere les data via la fonction all
-$matches = [];
+$teams = allTeams($pdo); //récupere les data via la fonction all
+$matches = matchesAllWithTeamsGrouped(matchesAllWithTeams($pdo));
+//var_dump($matches);
+//die();
 $standings = [];
 $handle = fopen(FILE_PATH, 'r'); //r = read, fopen stock le contenu du fichier dans $handle
 $headers = fgetcsv($handle, 1000, ','); // on récupère les headers car cette fonction ne prend qu'une ligne
+//var_dump($matches);
+//die;
 //recuperation
 function getEmptySatsArray(): array
 {
@@ -33,7 +38,7 @@ while ($line = fgetcsv($handle, 1000, ',')) {
     //fgetcsv ne prend qu'une ligne à la fois
     //la boucle continue tant que fgetcsv() revoie quelque chose
     $match = array_combine($headers, $line);
-    $matches[] = $match;
+    /* $matches[] = $match; */
     //
     $homeTeam = $match['home-team'];
     $awayTeam = $match['away-team'];

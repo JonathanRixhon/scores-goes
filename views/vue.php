@@ -63,13 +63,14 @@
             <tbody>
 
                 <!-- Affichage des matches à partir de $matches -->
+
                 <?php foreach ($matches as $match) : ?>
                     <tr>
-                        <td><?= (new DateTime($match['match-date'], new DateTimeZone('Europe/Brussels')))->format('M jS, Y') ?></td>
-                        <td><?= $match['home-team'] ?></td>
-                        <td><?= $match['home-team-goals'] ?></td>
-                        <td><?= $match['away-team-goals'] ?></td>
-                        <td><?= $match['away-team'] ?></td>
+                        <td><?= $match->match_date ?></td>
+                        <td><?= $match->home_team ?></td>
+                        <td><?= $match->home_team_goals ?></td>
+                        <td><?= $match->away_team_goals ?></td>
+                        <td><?= $match->away_team ?></td>
                     </tr>
                 <?php endforeach; ?>
 
