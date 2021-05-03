@@ -66,7 +66,7 @@
 
                 <?php foreach ($matches as $match) : ?>
                     <tr>
-                        <td><?= $match->match_date ?></td>
+                        <td><?= ($match->match_date)->format('M l jS, Y') ?></td>
                         <td><?= $match->home_team ?></td>
                         <td><?= $match->home_team_goals ?></td>
                         <td><?= $match->away_team_goals ?></td>
@@ -78,8 +78,9 @@
         </table>
     </section>
     <section>
+        <!-- ************ FORMULAIRE ************ -->
         <h2>Encodage d’un nouveau match</h2>
-        <form action="manage.php" method="post">
+        <form action="index.php" method="post">
             <label for="match-date">Date du match</label>
             <input type="text" id="match-date" name="match-date" placeholder="2020-04-10">
             <br>
