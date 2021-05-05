@@ -1,4 +1,3 @@
 <?php
 define('BD_PATH', $_SERVER['DOCUMENT_ROOT'] . '/data/scores.sqlite');
-define('TODAY', (new DateTime('now', new DateTimeZone('Europe/Brussels')))
-    ->format('M jS, Y'));
+define('TODAY', \Carbon\Carbon::now('Europe/Brussels')->locale('fr_BE')->isoFormat('dddd DD MMMM YYYY'));

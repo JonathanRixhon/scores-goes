@@ -1,6 +1,6 @@
 <?php
 
-namespace Team;
+namespace Models\Team;
 
 function all(\PDO $connection): array
 {
@@ -26,4 +26,15 @@ function findByName(\PDO $connection, string $name): \stdClass
     $pdoSt->execute([':name' => $name]);
 
     return $pdoSt->fetch();
+}
+
+function save(\PDO $connection, array $team): bool
+{
+    try {
+        $insertTeamRequest = "INSERT INTO teams (`name`,`slug`) VALUES (:name,:slug)";
+        $pdoSt = $connection->prepare($insertTeamRequest);
+        return $pdoSt->execute([':name' => $team["name"], ':slug' => $team["slug"]]);
+    } catch (\PDOException $th) {
+        die($th->getMessage());
+    }
 }

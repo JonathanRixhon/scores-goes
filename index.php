@@ -1,18 +1,26 @@
 <?php
+//importation composer
+
+use Carbon\Carbon;
+
+require('./vendor/autoload.php');
 //importations
+require("./controllers/match.php");
+require("./controllers/team.php");
+require("./utils/standings.php");
 require("./configs/config.php");
 require("./utils/dbacess.php");
-require("./utils/standings.php");
-require("./models/team.php");
 require("./models/match.php");
+require("./models/team.php");
 //importatoin grâce au  namespaces
-use function Team\findByName;
-use function Team\all as allTeams;
-use function Match\save as saveMatch;
-use function Match\AllWithTeams as matchesAllWithTeams;
-use function Match\AllWithTeamsGrouped as matchesAllWithTeamsGrouped;
+use function Models\Team\all as allTeams;
+use function Controllers\Team\store as storeTeam;
+use function Controllers\Match\store as storeMatch;
+use function Models\Match\AllWithTeams as matchesAllWithTeams;
+use function Models\Match\AllWithTeamsGrouped as matchesAllWithTeamsGrouped;
 
 $pdo = getConnection();
+
 /* 
 **********************************
 
@@ -23,29 +31,14 @@ chaque requète est caractérisée par :
 
 **********************************
 */
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //Vérification des champs cachés de sécurité
     if (isset($_POST['action']) && isset($_POST['ressource'])) {
         if ($_POST['action'] === 'store' && $_POST['ressource'] === 'match') {
-            //récupération depuis la requête
-
-            $matchDate = $_POST['match-date'];
-            $homeTeam = $_POST['home-team'];
-            $awayTeam = $_POST['away-team'];
-            $homeTeamGoals = $_POST['home-team-goals'];
-            $awayTeamGoals = $_POST['away-team-goals'];
-
-            $match = [
-                'date' => $matchDate,
-                'home-team' => $homeTeam,
-                'away-team' => $awayTeam,
-                'home-team-goals' => $homeTeamGoals,
-                'away-team-goals' => $awayTeamGoals,
-            ];
-            //ajouter dans la db
-            saveMatch($pdo, $match);
-            header('Location: index.php');
-            exit();
+            storeMatch($pdo);
+        } else if ($_POST['action'] === 'store' && $_POST['ressource'] === 'team') {
+            storeTeam($pdo);
         }
     }
 } else if ($_SERVER["REQUEST_METHOD"] === "GET") {

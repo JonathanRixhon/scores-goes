@@ -1,6 +1,6 @@
 <?php
 //définition de l'espace de nom pour que les fonctions puissent avoir le même nom.
-namespace Match;
+namespace Models\Match;
 
 use DateTime;
 
@@ -30,7 +30,7 @@ function AllWithTeams(\PDO $connection): array
 
 function AllWithTeamsGrouped($allWithTeams): array
 {
-    $m = null;
+    $m = new \stdClass();
     $matchesWithTeams = [];
     foreach ($allWithTeams as $match) {
         if (!$match->is_home) {
@@ -70,11 +70,10 @@ function save(\PDO $connection, array $match): bool
 
     //EXECUTION POUR LA AWAY TEAM
     $pdoSt = $connection->prepare($insertParticipationRequest);
-    $pdoSt->execute([
+    return $pdoSt->execute([
         ':match_id' => $id,
         ':team_id' => $match['away-team'],
         ':goals' => $match['away-team-goals'],
         ':is_home' => 0,
     ]);
-    return true;
 }
