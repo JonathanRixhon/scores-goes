@@ -1,0 +1,12 @@
+{
+    "name": "jonathanrixhon/score-goes",
+    "require": {
+        "nesbot/carbon": "^2.47"
+    },
+    "authors": [
+        {
+            "name": "jonathanrixhon",
+            "email": "jonathan.rixhon@hotmail.com"
+        }
+    ]
+}
