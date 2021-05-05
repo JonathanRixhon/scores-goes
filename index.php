@@ -6,24 +6,46 @@ require("./utils/standings.php");
 require("./models/team.php");
 require("./models/match.php");
 //importatoin grâce au  namespaces
+use function Team\findByName;
 use function Team\all as allTeams;
+use function Match\save as saveMatch;
 use function Match\AllWithTeams as matchesAllWithTeams;
 use function Match\AllWithTeamsGrouped as matchesAllWithTeamsGrouped;
 
 $pdo = getConnection();
+/* 
+**********************************
+
+chaque requète est caractérisée par :
+    - sa méthode GET/POST
+    - une action Lister/créer/éditer/sauvegarder/supprimer
+    - une ressource Team/match dans ce cas-ci
+
+**********************************
+*/
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //Vérification des champs cachés de sécurité
     if (isset($_POST['action']) && isset($_POST['ressource'])) {
         if ($_POST['action'] === 'store' && $_POST['ressource'] === 'match') {
             //récupération depuis la requête
+
             $matchDate = $_POST['match-date'];
-            $homeTeam = $_POST['home-team-unlisted'] === '' ? $_POST['home-team'] : $_POST['home-team-unlisted'];
-            $awayTeam = $_POST['away-team-unlisted'] === '' ? $_POST['away-team'] : $_POST['away-team-unlisted'];
+            $homeTeam = $_POST['home-team'];
+            $awayTeam = $_POST['away-team'];
             $homeTeamGoals = $_POST['home-team-goals'];
             $awayTeamGoals = $_POST['away-team-goals'];
 
-            $match = [$matchDate, $homeTeam, $homeTeamGoals, $awayTeamGoals, $awayTeam];
-            //ajouterdan la db
+            $match = [
+                'date' => $matchDate,
+                'home-team' => $homeTeam,
+                'away-team' => $awayTeam,
+                'home-team-goals' => $homeTeamGoals,
+                'away-team-goals' => $awayTeamGoals,
+            ];
+            //ajouter dans la db
+            saveMatch($pdo, $match);
+            header('Location: index.php');
+            exit();
         }
     }
 } else if ($_SERVER["REQUEST_METHOD"] === "GET") {

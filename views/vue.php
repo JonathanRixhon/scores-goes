@@ -9,73 +9,81 @@
 
 <body>
     <h1>Premier League 2020</h1>
-    <section>
-        <h2>Standings</h2>
-        <table>
-            <thead>
-                <tr>
-                    <td></td>
-                    <th scope="col">Team</th>
-                    <th scope="col">Games</th>
-                    <th scope="col">Points</th>
-                    <th scope="col">Wins</th>
-                    <th scope="col">Losses</th>
-                    <th scope="col">Draws</th>
-                    <th scope="col">GF</th>
-                    <th scope="col">GA</th>
-                    <th scope="col">GD</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                <!-- Affichage des statistiques des équipes -->
-                <?php $i = 1 ?>
-                <?php foreach ($standings as $team => $teamStats) : ?>
+    <?php if (count($matches)) : ?>
+        <section>
+            <h2>Standings</h2>
+            <table>
+                <thead>
                     <tr>
-                        <td><?= $i++; ?></td>
-                        <th scope="row"><?= $team ?></th>
-                        <td><?= $teamStats['games'] ?></td>
-                        <td><?= $teamStats['points'] ?></td>
-                        <td><?= $teamStats['wins'] ?></td>
-                        <td><?= $teamStats['losses'] ?></td>
-                        <td><?= $teamStats['draws'] ?></td>
-                        <td><?= $teamStats['GF'] ?></td>
-                        <td><?= $teamStats['GA'] ?></td>
-                        <td><?= $teamStats['GD'] ?></td>
+                        <td></td>
+                        <th scope="col">Team</th>
+                        <th scope="col">Games</th>
+                        <th scope="col">Points</th>
+                        <th scope="col">Wins</th>
+                        <th scope="col">Losses</th>
+                        <th scope="col">Draws</th>
+                        <th scope="col">GF</th>
+                        <th scope="col">GA</th>
+                        <th scope="col">GD</th>
                     </tr>
-                <?php endforeach; ?>
+                </thead>
+                <tbody>
 
-            </tbody>
-        </table>
-    </section>
+                    <!-- Affichage des statistiques des équipes -->
+                    <?php $i = 1 ?>
+                    <?php foreach ($standings as $team => $teamStats) : ?>
+                        <tr>
+                            <td><?= $i++; ?></td>
+                            <th scope="row"><?= $team ?></th>
+                            <td><?= $teamStats['games'] ?></td>
+                            <td><?= $teamStats['points'] ?></td>
+                            <td><?= $teamStats['wins'] ?></td>
+                            <td><?= $teamStats['losses'] ?></td>
+                            <td><?= $teamStats['draws'] ?></td>
+                            <td><?= $teamStats['GF'] ?></td>
+                            <td><?= $teamStats['GA'] ?></td>
+                            <td><?= $teamStats['GD'] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+
+                </tbody>
+            </table>
+        </section>
+    <?php endif; ?>
+
     <section>
-        <h2>Games played at <?= TODAY ?></h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Home Team</th>
-                    <th>Home Team Goals</th>
-                    <th>Away Team Goals</th>
-                    <th>Away Team</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                <!-- Affichage des matches à partir de $matches -->
-
-                <?php foreach ($matches as $match) : ?>
+        <h2>Matche joués le <?= TODAY ?></h2>
+        <?php if (count($matches)) : ?>
+            <table>
+                <thead>
                     <tr>
-                        <td><?= ($match->match_date)->format('M l jS, Y') ?></td>
-                        <td><?= $match->home_team ?></td>
-                        <td><?= $match->home_team_goals ?></td>
-                        <td><?= $match->away_team_goals ?></td>
-                        <td><?= $match->away_team ?></td>
+                        <th>Date</th>
+                        <th>À domicile</th>
+                        <th>Goals de l'équipe visitée</th>
+                        <th>Goals de l'équipe visiteuse</th>
+                        <th>Équipe visiteuse</th>
                     </tr>
-                <?php endforeach; ?>
+                </thead>
+                <tbody>
 
-            </tbody>
-        </table>
+                    <!-- Affichage des matches à partir de $matches -->
+
+                    <?php foreach ($matches as $match) : ?>
+                        <tr>
+                            <td><?= ($match->match_date)->format('M l jS, Y') ?></td>
+                            <td><?= $match->home_team ?></td>
+                            <td><?= $match->home_team_goals ?></td>
+                            <td><?= $match->away_team_goals ?></td>
+                            <td><?= $match->away_team ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+
+                </tbody>
+            </table>
+
+        <?php else : ?>
+            <p> Aucun match n'a été joué à ce jour.</p>
+        <?php endif; ?>
     </section>
     <section>
         <!-- ************ FORMULAIRE ************ -->

@@ -48,3 +48,33 @@ function AllWithTeamsGrouped($allWithTeams): array
     }
     return $matchesWithTeams;
 }
+
+function save(\PDO $connection, array $match): bool
+{
+    $insertMatchRequest = "INSERT INTO matches (`date`,`slug`) VALUES (:date,:slug)";
+    $pdoSt = $connection->prepare($insertMatchRequest);
+    $pdoSt->execute([':date' => $match["date"], ':slug' => '']);
+    $id = $connection->lastInsertId();
+
+    //Insertion pour les participations
+    $insertParticipationRequest = "INSERT INTO participations (`match_id`,`team_id`,`goals`,`is_home`) VALUES (:match_id,:team_id,:goals,:is_home)";
+
+    //EXECUTION POUR LA HOME TEAM
+    $pdoSt = $connection->prepare($insertParticipationRequest);
+    $pdoSt->execute([
+        ':match_id' => $id,
+        ':team_id' => $match['home-team'],
+        ':goals' => $match['home-team-goals'],
+        ':is_home' => 1,
+    ]);
+
+    //EXECUTION POUR LA AWAY TEAM
+    $pdoSt = $connection->prepare($insertParticipationRequest);
+    $pdoSt->execute([
+        ':match_id' => $id,
+        ':team_id' => $match['away-team'],
+        ':goals' => $match['away-team-goals'],
+        ':is_home' => 0,
+    ]);
+    return true;
+}
