@@ -3,6 +3,7 @@
 function getEmptySatsArray(): array
 {
     return [
+        'logo' => '',
         'games' => 0,
         'points' => 0,
         'wins' => 0,

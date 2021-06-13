@@ -1,40 +1,41 @@
 <?php
 
-namespace Models\Team;
+namespace Models;
 
-function all(\PDO $connection): array
+class Team extends Model
 {
-    $teamsRequest = 'SELECT * FROM teams ORDER BY name';
-    $pdoSt = $connection->query($teamsRequest);
+    protected $table = 'teams';
+    protected $findKey = 'id';
 
-    return $pdoSt->fetchAll();
-}
+    function all(): array
+    {
+        $teamsRequest = 'SELECT * FROM teams ORDER BY name';
+        $pdoSt = $this->pdo->query($teamsRequest);
 
-function find(\PDO $connection, string $id): \stdClass
-{
-    $teamRequest = 'SELECT * FROM teams WHERE id = :id';
-    $pdoSt = $connection->prepare($teamRequest);
-    $pdoSt->execute([':id' => $id]);
+        return $pdoSt->fetchAll();
+    }
 
-    return $pdoSt->fetch();
-}
+    function findByName(string $name): \stdClass
+    {
+        $teamRequest = 'SELECT * FROM teams WHERE name = :name';
+        $pdoSt = $this->pdo->prepare($teamRequest);
+        $pdoSt->execute([':name' => $name]);
 
-function findByName(\PDO $connection, string $name): \stdClass
-{
-    $teamRequest = 'SELECT * FROM teams WHERE name = :name';
-    $pdoSt = $connection->prepare($teamRequest);
-    $pdoSt->execute([':name' => $name]);
+        return $pdoSt->fetch();
+    }
 
-    return $pdoSt->fetch();
-}
-
-function save(\PDO $connection, array $team): bool
-{
-    try {
-        $insertTeamRequest = "INSERT INTO teams (`name`,`slug`) VALUES (:name,:slug)";
-        $pdoSt = $connection->prepare($insertTeamRequest);
-        return $pdoSt->execute([':name' => $team["name"], ':slug' => $team["slug"]]);
-    } catch (\PDOException $th) {
-        die($th->getMessage());
+    function save(array $team): bool
+    {
+        try {
+            $insertTeamRequest = "INSERT INTO teams (`name`,`slug`,`file_name`) VALUES (:name,:slug,:file_name)";
+            $pdoSt = $this->pdo->prepare($insertTeamRequest);
+            return $pdoSt->execute([
+                ':name' => $team["name"],
+                ':slug' => $team["slug"],
+                ':file_name' => $team["file_name"]
+            ]);
+        } catch (\PDOException $th) {
+            die($th->getMessage());
+        }
     }
 }

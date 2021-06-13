@@ -1,12 +1,19 @@
 {
     "name": "jonathanrixhon/score-goes",
     "require": {
-        "nesbot/carbon": "^2.47"
+        "nesbot/carbon": "^2.47",
+        "intervention/image": "^2.5"
     },
     "authors": [
         {
             "name": "jonathanrixhon",
             "email": "jonathan.rixhon@hotmail.com"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+            "Models\\":"models/",
+            "Controllers\\":"controllers/"
+        }
+    }
 }
